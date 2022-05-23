@@ -23,16 +23,20 @@ module.exports = {
     });
   },
   getAllEvents(req, res) {
-    // console.log("token:" + req.token);
+    console.log("token:" + req.token);
+
     jwt.verify(req.token, "secret", async (err, authData) => {
+
       if (err) {
         res.sendStatus(401);
       } else {
-        const { eventType } = req.params;
-        const query = eventType ? { eventType } : {};
-
+  
         try {
-          const events = await Event.find(query);
+          console.log("Events ========> ");
+          
+          const events = await Event.find();
+
+          console.log(events);
 
           if (events) {
             return res.json({ authData, events });

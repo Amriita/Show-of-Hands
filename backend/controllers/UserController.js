@@ -5,15 +5,16 @@ const jwt = require('jsonwebtoken');
 module.exports = {
   async createUser(req, res) {
     try {
-      const { email, firstName, lastName, password } = req.body;
-      const existentUser = await User.findOne({ email });
+      const { UniqueId , email, name, Department ,  password  } = req.body;
+      const existentUser = await User.findOne({ UniqueId });
 
       if (!existentUser) {
         const hashPassword = await bcrypt.hash(password, 10);
         const userResponse = await User.create({
           email,
-          firstName,
-          lastName,
+          UniqueId,
+          name,
+          Department,
           password: hashPassword,
         });
 
@@ -25,7 +26,7 @@ module.exports = {
         });
       } else {
         return res.status(400).json({
-          message: "Email already exists!  Do you want to login instead? ",
+          message: "UniqueId already exists!  Do you want to login instead? ",
         });
       }
     } catch (err) {

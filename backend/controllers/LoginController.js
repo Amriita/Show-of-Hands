@@ -4,13 +4,13 @@ const jwt = require("jsonwebtoken");
 module.exports = {
   async store(req, res) {
     try {
-      const { email, password } = req.body;
+      const { UniqueId, password } = req.body;
 
-      if (!email || !password) {
+      if (!UniqueId || !password) {
         return res.status(200).json({ message: "Required field missing!" });
       }
 
-      const user = await User.findOne({ email });
+      const user = await User.findOne({ UniqueId });
       if (!user) {
         return res.status(200).json({
           message: "User not found! Do you want to register instead?",
@@ -20,7 +20,7 @@ module.exports = {
       if (user && (await bcrypt.compare(password, user.password))) {
         const userResponse = {
           _id: user._id,
-          email: user.email,
+          UniqueId: user.UniqueId,
           firstName: user.firstName,
           lastName: user.lastName,
         };
@@ -33,7 +33,7 @@ module.exports = {
       } else {
         return res
           .status(200)
-          .json({ message: "Email or Password does not match!" });
+          .json({ message: "UniqueId or Password does not match!" });
       }
     } catch (error) {
       throw Error(`Error while Authenticating a User ${error}`);
